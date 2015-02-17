@@ -1,31 +1,57 @@
 ---
-title: "pitch"
+title: "Patent Applications in Different Countries"
 author: "Ke Wang"
 date: "February 17, 2015"
 output: ioslides_presentation
 ---
 
-## R Markdown
+## A Shiny-App to Visualize Patent Filings from Each Country
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+- Number of patents has always been a widely-used economic indicator that measures a country's capability to innovate.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+- Both absolute number of filings and trend are important, as they tell different stories.
 
-## Slide with Bullets
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+## Data
 
-## Slide with R Code and Output
+We gathered patent filing data that the World Bank Published for the following countries:
 
-```{r}
-summary(cars)
+- United States
+- United Kingdom
+- Japan
+- Russia
+- France
+- Germany
+- China
+
+The data covers patent filings from 1960 to 2012.
+
+## Number of Patents Filed from Each Country
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+data <- read.csv("raw.csv")
+  normalized <- summarise(group_by(data, country), base=min(applications, na.rm=TRUE))
+  data <- merge(data, normalized, by=c('country'))
+  data$normalized <- data$applications / data$base
 ```
 
-## Slide with Plot
-
-```{r, echo=FALSE}
-plot(cars)
+```{r message=FALSE,warning=FALSE}
+qplot(year, applications, data=data, color=country, geom=c('line'))
 ```
 
+## Trend of Patents Filed from Each Country
+
+```{r, message=FALSE,warning=FALSE}
+qplot(year, normalized, data=data,color=country, geom=c('line'))
+```
+
+## Conclusion
+
+From the charts, we can draw the following conclusions
+
+- Japan and US had long been leaders in patent filings before China surpassed both around 2010.
+- The rise in patent filings from China was in a fast pace that none of the other countries had seen before.
+
+More detail is available at <https://wangcaillc.shinyapps.io/patenttrend/>.
