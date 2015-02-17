@@ -33,6 +33,8 @@ shinyUI(fluidPage(
     # Show a plot of the generated distribution
     mainPanel(
       plotOutput("distPlot"),
+      p("Please select countries that you would like to show in the chart on the top left select box, 
+        and choose how you want to view the data with the dropdown box below."),
       p("Based on data from World Bank.")
     )
   )
